@@ -36,3 +36,47 @@ func GetRepositoryData() ([]RepositoryData, error) {
 
 	return repositories, nil
 }
+
+// TODO: Check if name is unique
+func AddRepository(name string, remote string) error {
+	homeDir, err := os.UserHomeDir()
+	if err != nil {
+		fmt.Println(err.Error())
+
+		return errors.New("Could not find a home directory.")
+	}
+
+	if err := createMissing(homeDir + "/.local/share/tmpl/"); err != nil {
+		return err
+	}
+
+	repositories, _ := GetRepositoryData()
+	if repositories == nil {
+		repositories = []RepositoryData{}
+	}
+	repositories = append(repositories, RepositoryData{Name: name, Remote: remote})
+
+	jsonData, err := json.Marshal(repositories)
+	if err != nil {
+		fmt.Println(err.Error())
+
+		return errors.New("Could not parse data to json")
+	}
+
+	if err := os.WriteFile(homeDir+"/.local/share/tmpl/repositories.json", jsonData, 0750); err != nil {
+		fmt.Println(err.Error())
+
+		return errors.New("Could not write to file")
+	}
+
+	return nil
+}
+
+func createMissing(path string) error {
+	if err := os.MkdirAll(path, 0750); err != nil {
+		fmt.Println(err.Error())
+		return errors.New("Could not create missing directories.")
+	}
+
+	return nil
+}
