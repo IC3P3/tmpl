@@ -8,7 +8,7 @@ import (
 
 var rootCmd = &cobra.Command{
 	Use:   "tmpl",
-	Short: "tmpl is a tool to quickly generate all the boilerplate code to your needs",
+	Short: "Generate the boilerplate code to your new project.",
 	Long: `tmpl is a CLI tool used to quickly create all kinds of
 different boilderplate code. These templates are defined by a
 Git repository to create different base templates and addons
