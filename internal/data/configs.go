@@ -13,28 +13,25 @@ type RepositoryData struct {
 }
 
 func GetRepositoryData() ([]RepositoryData, error) {
-	configFile, err := os.UserHomeDir()
+	homeDir, err := os.UserHomeDir()
 	if err != nil {
 		fmt.Println(err.Error())
 
-		noHome := errors.New("Could not find a home directory.")
-		return nil, noHome
+		return nil, errors.New("Could not find a home directory.")
 	}
 
-	file, err := os.ReadFile(configFile + "/.local/share/tmpl/repositories.json")
+	file, err := os.ReadFile(homeDir + "/.local/share/tmpl/repositories.json")
 	if err != nil {
 		fmt.Println(err.Error())
 
-		noFile := errors.New("No file or permission to read the file.")
-		return nil, noFile
+		return nil, errors.New("No file or permission to read the file.")
 	}
 
 	repositories := []RepositoryData{}
 	if err := json.Unmarshal(file, &repositories); err != nil {
 		fmt.Println(err.Error())
 
-		parsingError := errors.New("Could not parse repository.json")
-		return nil, parsingError
+		return nil, errors.New("Could not parse repository.json")
 	}
 
 	return repositories, nil
