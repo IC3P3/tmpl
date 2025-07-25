@@ -1,4 +1,4 @@
-module github.com/IC3P3/go-tmpl
+module github.com/IC3P3/tmpl
 
 go 1.24.5
 
