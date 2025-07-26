@@ -17,9 +17,11 @@ type Answer struct {
 func AskFromListMultiple(description string, options []Answer) ([]Answer, error) {
 	fmt.Println(description)
 
+	fmt.Println()
 	for _, option := range options {
-		fmt.Printf("\n%d: \t%s\t\t\t%s\n\n", option.Id, option.Name, option.Description)
+		fmt.Printf("%d: \t%s\t\t\t%s\n", option.Id, option.Name, option.Description)
 	}
+	fmt.Println()
 
 	fmt.Printf("Enter a selection space-seperated (%d-%d): ", 1, len(options)+1)
 
@@ -48,9 +50,11 @@ func AskFromListMultiple(description string, options []Answer) ([]Answer, error)
 func AskFromListSingle(description string, options []Answer) (Answer, error) {
 	fmt.Println(description)
 
+	fmt.Println()
 	for _, option := range options {
-		fmt.Printf("\n%d: \t%s\t\t\t%s\n\n", option.Id+1, option.Name, option.Description)
+		fmt.Printf("%d: \t%s\t\t\t%s\n", option.Id+1, option.Name, option.Description)
 	}
+	fmt.Println()
 
 	fmt.Printf("Enter a one number (%d-%d): ", 1, len(options))
 
