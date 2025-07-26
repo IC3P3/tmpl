@@ -10,8 +10,8 @@ import (
 )
 
 var createCmd = &cobra.Command{
-	Use:   "create <Template Name> <Project Name>",
-	Args:  cobra.ExactArgs(2),
+	Use:   "create <Template Repository> <Template Name> <Project Name>",
+	Args:  cobra.ExactArgs(3),
 	Short: "Create a new project from a template",
 	Long: `Start the process of creating a project from the
 available template configurations.`,
@@ -26,7 +26,7 @@ available template configurations.`,
 			log.Fatal(err)
 		}
 
-		data.CopyDirectory(homeDir+"/.local/share/tmpl/"+args[0], currentDir+"/"+args[1])
+		data.CopyDirectory(homeDir+"/.local/share/tmpl/"+args[0]+"/templates/"+args[1], currentDir+"/"+args[2])
 
 		fmt.Println("The project was successfully created.")
 	},
