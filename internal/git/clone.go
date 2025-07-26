@@ -16,17 +16,14 @@ func GetTemplateRepository(name string, remote string) error {
 		return errors.New("Could not find a home directory.")
 	}
 
-	repository, err := git.PlainClone(homeDir+"/.local/share/tmpl/"+name, false, &git.CloneOptions{
+	if _, err := git.PlainClone(homeDir+"/.local/share/tmpl/"+name, false, &git.CloneOptions{
 		URL:   remote,
 		Depth: 1,
-	})
-	if err != nil {
+	}); err != nil {
 		fmt.Println(err.Error())
 
 		return errors.New("Could not clone the repository.")
 	}
-
-	fmt.Println(repository)
 
 	return nil
 }
