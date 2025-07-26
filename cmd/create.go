@@ -2,17 +2,33 @@ package cmd
 
 import (
 	"fmt"
+	"log"
+	"os"
 
+	"github.com/IC3P3/tmpl/internal/data"
 	"github.com/spf13/cobra"
 )
 
 var createCmd = &cobra.Command{
-	Use:   "create",
+	Use:   "create <Template Name> <Project Name>",
+	Args:  cobra.ExactArgs(2),
 	Short: "Create a new project from a template",
 	Long: `Start the process of creating a project from the
 available template configurations.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Not implemented for now!")
+		currentDir, err := os.Getwd()
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		homeDir, err := os.UserHomeDir()
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		data.CopyDirectory(homeDir+"/.local/share/tmpl/"+args[0], currentDir+"/"+args[1])
+
+		fmt.Println("The project was successfully created.")
 	},
 }
 
