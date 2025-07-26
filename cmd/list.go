@@ -14,7 +14,7 @@ var listCmd = &cobra.Command{
 	Long: `This command lists all the available/added repository usable
 by the tmpl tool.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		repositories, err := data.GetRepositoryData()
+		repositories, err := data.GetRepositories()
 		if err != nil {
 			log.Fatal(err)
 		}

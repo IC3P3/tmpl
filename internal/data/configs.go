@@ -12,7 +12,7 @@ type RepositoryData struct {
 	Remote string
 }
 
-func GetRepositoryData() ([]RepositoryData, error) {
+func GetRepositories() ([]RepositoryData, error) {
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
 		fmt.Println(err.Error())
@@ -50,7 +50,7 @@ func AddRepository(name string, remote string) error {
 		return err
 	}
 
-	repositories, _ := GetRepositoryData()
+	repositories, _ := GetRepositories()
 	if repositories == nil {
 		repositories = []RepositoryData{}
 	}
@@ -73,7 +73,7 @@ func AddRepository(name string, remote string) error {
 }
 
 func RemoveRepository(name string) error {
-	repositories, _ := GetRepositoryData()
+	repositories, _ := GetRepositories()
 	if repositories == nil {
 		return errors.New("No repository available")
 	}
