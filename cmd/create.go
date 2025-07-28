@@ -49,7 +49,7 @@ available template configurations.`,
 			useTempOptions = append(useTempOptions, commands.Answer{Id: i, Name: template.Name, Description: template.Description})
 		}
 
-		template, err := commands.AskFromListSingle("Choose the repository you want to use.", useTempOptions)
+		templateAnswer, err := commands.AskFromListSingle("Choose the repository you want to use.", useTempOptions)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -64,7 +64,37 @@ available template configurations.`,
 			log.Fatal(err)
 		}
 
-		data.CopyDirectory(homeDir+"/.local/share/tmpl/"+templateRepository.Name+"/templates/"+template.Name, currentDir+"/"+projectName)
+		data.CopyDirectory(homeDir+"/.local/share/tmpl/"+templateRepository.Name+"/templates/"+templateAnswer.Name, currentDir+"/"+projectName)
+
+		var addons []string
+		var addonOptions []commands.Answer
+		for _, template := range templates {
+			if template.Name == templateAnswer.Name {
+				addons = template.Addons
+			}
+		}
+
+		availableAddons, err := data.GetAddonData(templateRepository.Name)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		for i, addonName := range addons {
+			for _, addon := range availableAddons {
+				if addonName == addon.Name {
+					addonOptions = append(addonOptions, commands.Answer{Id: i + 1, Name: addon.DisplayName, Description: addon.Description})
+				}
+			}
+		}
+
+		addonAnswer, err := commands.AskFromListMultiple("Which addons do you want to use", addonOptions)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		for _, addon := range addonAnswer {
+			data.CopyDirectory(homeDir+"/.local/share/tmpl/"+templateRepository.Name+"/addons/"+addon.Name, currentDir+"/"+projectName)
+		}
 
 		fmt.Println("The project was successfully created.")
 	},

@@ -11,17 +11,16 @@ type TemplateConfig struct {
 	Displayname string
 	Name        string
 	Description string
-	Prehook     []string
-	Posthook    []string
+	Addons      []string
 }
 
-type AddonConfig struct{}
-
-type HookConfig struct {
-	Displayname string
+type AddonConfig struct {
+	DisplayName string
 	Name        string
 	Description string
 }
+
+type HookConfig struct{}
 
 type RepositoryConfig struct {
 	Displayname string
@@ -98,4 +97,29 @@ func GetTemplateData(repoName string) ([]TemplateConfig, error) {
 	}
 
 	return repositoryContent.Templates, nil
+}
+
+func GetAddonData(repoName string) ([]AddonConfig, error) {
+	homeDir, err := os.UserHomeDir()
+	if err != nil {
+		fmt.Println(err.Error())
+
+		return []AddonConfig{}, errors.New("Could not find a home directory.")
+	}
+
+	file, err := os.ReadFile(homeDir + "/.local/share/tmpl/" + repoName + "/tmpl.json")
+	if err != nil {
+		fmt.Println(err.Error())
+
+		return []AddonConfig{}, errors.New("No file or permission to read the file.")
+	}
+
+	repositoryContent := RepositoryConfig{}
+	if err := json.Unmarshal(file, &repositoryContent); err != nil {
+		fmt.Println(err.Error())
+
+		return []AddonConfig{}, errors.New("Could not parse repository.json")
+	}
+
+	return repositoryContent.Addons, nil
 }
